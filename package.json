@@ -11,7 +11,10 @@
     "url": "git@github.com:nko4/nodest-colony.git"
   },
   "dependencies": {
-    "nko": "*"
+    "nko": "*",
+    "connect": "~2.11.0",
+    "dispatch": "~0.2.0",
+    "express": "~3.4.4"
   },
   "engines": {
     "node": "0.10.x"
