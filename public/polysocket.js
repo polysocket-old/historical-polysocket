@@ -77,7 +77,15 @@ var PolySocket = function(ws) {
       self.socket_id = data.socket_id
 
       function poll() {
-        microAjax('/polysocket/xhr-poll?socket_id=' + self.socket_id, '', function(result, status) {
+        var uri = [
+          '/polysocket/xhr-poll',
+          '?socket_id=',
+          self.socket_id,
+          '&_=',
+          Math.random()
+        ].join('')
+
+        microAjax(uri, '', function(result, status) {
           console.log(arguments)
           var data = JSON.parse(result)
 
