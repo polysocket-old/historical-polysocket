@@ -56,6 +56,7 @@ app.get('/polysocket/xhr-poll', function(req, res) {
     // bitch, that's a mistake
     return res.json(400, {error: 'bitch, you best get yo\'self a real socket'})
   }
+  res.set('cache-control', 'private, max-age=0, no-cache')
   sockets[socket_id].set_client(res)
 })
 
