@@ -3,6 +3,7 @@ require('nko')('E1pvbS_tnK63AqjI')
 
 var isProduction = (process.env.NODE_ENV === 'production')
   , express      = require('express')
+  , path         = require('path')
   , port         = (isProduction ? 80 : 8000)
   , Q            = require('q')
   , uuid         = require('uuid')
@@ -13,7 +14,7 @@ var sockets = {} // will I store my sockets here?
 
 app.use(express.bodyParser())
 app.use(app.router)
-app.use(express.static('public'))
+app.use(express.static(path.resolve(__dirname, './public')))
 
 function Socket(ws){
   var self    = this
