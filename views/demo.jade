@@ -4,14 +4,27 @@ mixin demo()
   script(src="/demo.js")
   .demo
     .row
-      .col-lg-12
+      .col-lg-1
+      .col-lg-6
         h2 Demo
-        em using websocket server for <a href="http://html5demos.com/web-socket" target="_blank">http://html5demos.com/web-socket</a>
+        em using WebSocket server for <a href="http://html5demos.com/web-socket" target="_blank">http://html5demos.com/web-socket</a>
         .connection
           span.status.label.label-danger Disconnected
           p.users Users Connected:
-        textarea(rows="10", cols="80")
+        textarea(rows="10", cols="50")
         form
           input(type="text", name="test")
           input(type="submit", value="send")
-    </form>
+      .col-lg-4.text-left
+        br
+        br
+        br
+        .well
+          h3 So What?
+          ul
+            li This demo is using basic xhr-polling to connect to the PolySocket server which in turn connects to the actual chat server's WebSocket.
+            br
+            li No more runtime specific server libraries to manage and shim fake WebSockets.
+            br
+            li Just use PolySocket and build your server expecting real WebSocket connections.
+      .col-lg-1
