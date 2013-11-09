@@ -114,7 +114,6 @@ app.post('/polysocket/socket', function(req, res) {
 })
 
 app.get('/', function (req, res) {
-  console.log('rendering')
   res.render('index')
 })
 
