@@ -1,13 +1,14 @@
 // https://github.com/nko4/website/blob/master/module/README.md#nodejs-knockout-deploy-check-ins
 require('nko')('E1pvbS_tnK63AqjI')
 
-var isProduction = (process.env.NODE_ENV === 'production')
-  , express      = require('express')
-  , path         = require('path')
-  , port         = (isProduction ? 80 : 8000)
-  , Q            = require('q')
-  , uuid         = require('uuid')
-  , WebSocket    = require('ws')
+var isProduction     = (process.env.NODE_ENV === 'production')
+  , express          = require('express')
+  , path             = require('path')
+  , port             = (isProduction ? 80 : 8000)
+  , Q                = require('q')
+  , uuid             = require('uuid')
+  , WebSocket        = require('ws')
+  , XHRPollingSocket = require('./XHRPollingSocket')
 
 var app = express()
 var sockets = {} // will I store my sockets here?
@@ -18,70 +19,28 @@ app.use(express.bodyParser())
 app.use(app.router)
 app.use(express.static(path.resolve(__dirname, './public')))
 
-function Socket(ws){
-  var self    = this
-  this.buffer = []
-  this.client = null
-  this.ws     = ws
-  this.ws.then(function(ws) {
-    ws.on('message', function(data) {
-      console.log('websocket:data', data)
-      self.send_client(data)
-    })
-    ws.once('close', function() {
-      console.log('websocket:close')
-    })
-  })
-}
-
-// sets the current response client socket (current xhr poll stream)
-// sends any buffered messages immediately
-Socket.prototype.set_client = function(client) {
-  if (this.buffer.length) {
-    client.json({data: this.buffer})
-    this.buffer = []
-    this.client = null
-  } else {
-    this.client = client
-  }
-}
-
-// either uses the current client, or buffers and waits for client
-Socket.prototype.send_client = function(data) {
-  this.buffer.push(data)
-  if (this.client) {
-    this.set_client(this.client)
-  }
-}
-
-// sends data to the connected websocket
-Socket.prototype.send_ws = function(data) {
-  this.ws.then(function(ws) {
-    ws.send(data)
-  })
-}
-
 // creates a polysocket-managed socket
 // must provide target_ws parameter
 // (TODO forward headers)
 app.post('/polysocket/create', function(req, res) {
-  console.log("hi mom")
-  var socket_id = uuid.v1()
+  var deferred  = Q.defer()
     , target_ws = req.body.target_ws
-    , wsp       = Q.defer()
-    , ws
+    , ws        = new WebSocket(target_ws)
 
-  sockets[socket_id] = new Socket(wsp.promise)
-  ws = new WebSocket(target_ws)
   ws.once('open', function() {
-    console.log('websocket:open')
-    wsp.resolve(ws)
+    deferred.resolve()
   })
   ws.once('error', function(err) {
-    console.error('websocket:error', err)
-    wsp.reject(err)
+    deferred.reject(err)
   })
-  res.json({socket_id: socket_id})
+
+  Q.timeout(deferred.promise, 1500).then(function() {
+    var socket = new XHRPollingSocket(ws)
+    sockets[socket.id] = socket
+    res.json({socket_id: socket.id})
+  }).fail(function(err) {
+    res.json(400, {error: String(err)})
+  })
 })
 
 // long-lived polling xhr request, returns when we have data
