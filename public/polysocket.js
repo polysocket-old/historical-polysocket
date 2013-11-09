@@ -50,7 +50,7 @@ var PolySocket = function(ws) {
   if(!(this instanceof PolySocket))
     return new PolySocket(ws)
 
-  self = this
+  var self = this
 
   self.send = function() { console.error("Not yet connected") }
 
