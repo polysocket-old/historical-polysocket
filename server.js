@@ -34,7 +34,7 @@ function Socket(ws){
 // sends any buffered messages immediately
 Socket.prototype.set_client = function(client) {
   if (this.buffer.length) {
-    client.json({data: buffer})
+    client.json({data: this.buffer})
     this.buffer = []
     this.client = null
   } else {
@@ -46,7 +46,7 @@ Socket.prototype.set_client = function(client) {
 Socket.prototype.send_client = function(data) {
   this.buffer.push(data) 
   if (this.client) {
-    this.set_client()
+    this.set_client(this.client)
   }
 }
 
@@ -66,7 +66,7 @@ app.post('/polysocket/create', function(req, res) {
     , wsp       = Q.defer()
     , ws 
 
-  sockets[socket_id] = new Socket(wsp)
+  sockets[socket_id] = new Socket(wsp.promise)
   ws = new WebSocket(target_ws)
   ws.once('open', function() {
     console.log('websocket:open')
@@ -76,6 +76,7 @@ app.post('/polysocket/create', function(req, res) {
     console.error('websocket:error', err)
     wsp.reject(err)
   })
+  res.json({socket_id: socket_id})
 })
 
 // long-lived polling xhr request, returns when we have data
