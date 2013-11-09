@@ -36,6 +36,9 @@ app.post('/polysocket/create', function(req, res) {
 
   Q.timeout(deferred.promise, 1500).then(function() {
     var socket = new XHRPollingSocket(ws)
+    socket.once('close', function() {
+      delete sockets[socket.id]
+    })
     sockets[socket.id] = socket
     res.json({socket_id: socket.id})
   }).fail(function(err) {
