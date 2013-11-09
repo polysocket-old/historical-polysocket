@@ -48,7 +48,7 @@ Socket.prototype.set_client = function(client) {
 
 // either uses the current client, or buffers and waits for client
 Socket.prototype.send_client = function(data) {
-  this.buffer.push(data) 
+  this.buffer.push(data)
   if (this.client) {
     this.set_client(this.client)
   }
@@ -65,10 +65,11 @@ Socket.prototype.send_ws = function(data) {
 // must provide target_ws parameter
 // (TODO forward headers)
 app.post('/polysocket/create', function(req, res) {
+  console.log("hi mom")
   var socket_id = uuid.v1()
     , target_ws = req.body.target_ws
     , wsp       = Q.defer()
-    , ws 
+    , ws
 
   sockets[socket_id] = new Socket(wsp.promise)
   ws = new WebSocket(target_ws)
