@@ -1,14 +1,42 @@
 extends layout
 
 block content
-  .splash
+  header.header
     .container
-      .row
-        .col-lg-12.text-center
-          h1 PolySocket
-      .row
-        .col-lg-12
-          p Program pure WebSockets while supporting old browsers
+      .jumbotron
+        h1 PolySocket 
+        span Develop realtime apps with pure WebSockets, yet still support old browsers and crummy networks
+  .container.text-center
+    .row
+      .col-lg-4
+        h2 What?
+        p.lead PolySocket modernizes older browsers and poor networks to speak pure WebSockets, to the delight of developers and operations teams.
+      .col-lg-4
+        h2 Why?
+        p.lead Because you want to develop realtime applications for all your customers and only think about scaling WebSockets (not hacks). 
+      .col-lg-4
+        h2 How?
+        p.lead When WebSockets are unavailable, the browser connects to a PolySocket Relay. The relay then pipes all data to your pure WebSocket server.
+  .container
+    .row
+      .col-lg-6
+        h1 Echo Server
+        p Look mah, I made a echo server. IE 6 can still play along too.
+      .col-lg-6
+        script(src="https://gist.github.com/supershabam/7382515.js")
+    .row
+      .col-lg-6
+        h1 Echo Client
+        p Look mah, I connected to an echo server. IE 6 can still play along too.
+      .col-lg-6
+        script(src='https://gist.github.com/supershabam/7382596.js')
+    .row
+      .col-lg-12
+        h1 How will it scale?
+        p Scaling up shims, xhr-polling, event-sources, and whatever nonsense is used to emulate a websocket can be difficult, 
+          strong which is why it should be separate from your app!
+        p Using PolySocket, we designed the shims and nasty hacks we implemented to scale up to multiple servers to handle scaling load. Scaling up your application means scaling up websocket servers.
+
 
 
 
