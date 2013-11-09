@@ -1,75 +1,32 @@
-test
-## Quick Start
+polysocket
+----------
 
-~~~sh
-# getting the code
-git clone git@github.com:nko4/nodest-colony.git && cd ./nodest-colony/
+Assumptions:
 
-# developing
-npm install
-npm start
+* WebSockets are awesome
+* We should use WebSockets in client-side JavaScript
+* We should use WebSockets on the server
+* Browsers without WebSockets should be transparently upgraded (use same WebSocket client code and WebSocket server)
+* Networks where WebSockets are not the most network-efficient transport should transparently emulate a WebSocket
+* Scaling a server should be thinking only about managing long-lived WebSocket connections
+* Developer happiness is desired
+* Operational happiness is desired
+* Cookies are desired
 
-# deploying (to http://nodest-colony.2013.nodeknockout.com/)
-./deploy nko
+## What
 
-# ssh access
-ssh deploy@nodest-colony.2013.nodeknockout.com
-ssh root@nodest-colony.2013.nodeknockout.com
-# or, if you get prompted for a password
-ssh -i ./id_deploy deploy@nodest-colony.2013.nodeknockout.com
-ssh -i ./id_deploy root@nodest-colony.2013.nodeknockout.com
-~~~
+PolySocket is both a WebSocket shim and a ShimmedWebSocket relay server (to produce pure WebSockets).
 
-Read more about this setup [on our blog][deploying-nko].
+The client-side JavaScript provides a PolySocket object which strictly implements the WebSocket interface. When WebSockets are available on the browser (and the preferred choice given the network), PolySocket merely wraps WebSocket. Otherwise, when a different transport (e.g. xhr-streaming, json-polling) is required/preferred to emulate a WebSocket, the PolySocket object provides WebSocket functionality via a PolySocketRelay server.
 
-[deploying-nko]: http://blog.nodeknockout.com/post/66039926165/node-knockout-deployment-setup
+The PolySocketRelay server accepts non-WebSocket duplex streams, and forwards them to a target server translated into a pure WebSocket connection.
 
-## Tips
+## Why
 
-### Your Server
+Scaling the hacks of xhr-streaming, json-polling, etc... are difficult to do while also scaling your application. By separating these ShimmedWebSocket hacks to a central location (the PolySocketRelay), it is easier to scale the Relay on its own as needed and the backend WebSocket application on its own as needed.
 
-We've already set up a basic node server for you. Details:
+WebSockets are standard. If the day ever comes that 100% of your customers support WebSockets, then the only code change should be to stop including the PolySocket JavaScript and replace all invokations of `new PolySocket` with `new WebSocket`.
 
-* Ubuntu 12.04 (Precise) - 64-bit
-* server.js is at: `/home/deploy/current/server.js`
-* logs are at: `/home/deploy/shared/logs/server/current`
-* `runit` keeps the server running.
-  * `sv restart serverjs` - restarts
-  * `sv start serverjs` - starts
-  * `sv stop serverjs` - stops
-  * `ps -ef | grep runsvdir` - to see logs
-  * `cat /etc/service/serverjs/run` - to see the config
+## License
 
-You can use the `./deploy` script included in this repo to deploy to your
-server right now. Advanced users, feel free to tweak.
-
-Read more about this setup [on our blog][deploying-nko].
-
-### Vote KO Widget
-
-![Vote KO widget](http://f.cl.ly/items/1n3g0W0F0G3V0i0d0321/Screen%20Shot%202012-11-04%20at%2010.01.36%20AM.png)
-
-Use our "Vote KO" widget to let from your app directly. Here's the code for
-including it in your site:
-
-~~~html
-<iframe src="http://nodeknockout.com/iframe/nodest-colony" frameborder=0 scrolling=no allowtransparency=true width=115 height=25>
-</iframe>
-~~~
-
-### Tutorials & Free Services
-
-If you're feeling a bit lost about how to get started or what to use, we've
-got some [great resources for you](http://nodeknockout.com/resources),
-including:
-
-* [How to install node and npm](http://blog.nodeknockout.com/post/65463770933/how-to-install-node-js-and-npm)
-* [Getting started with Express](http://blog.nodeknockout.com/post/65630558855/getting-started-with-express)
-* [OAuth with Passport](http://blog.nodeknockout.com/post/66118192565/getting-started-with-passport)
-* [Going Beyond “Hello World” with Drywall](http://blog.nodeknockout.com/post/65711111886/going-beyond-hello-world-with-drywall)
-* [and many more](http://nodeknockout.com/resources#tutorials)&hellip;
-
-## Have fun!
-
-If you have any issues, we're on IRC in #nodeknockout on freenode, email us at
-<help@nodeknockout.com>, or tweet [@node_knockout](https://twitter.com/node_knockout).
+Apache 2
