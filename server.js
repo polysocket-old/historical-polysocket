@@ -12,6 +12,8 @@ var isProduction = (process.env.NODE_ENV === 'production')
 var app = express()
 var sockets = {} // will I store my sockets here?
 
+app.set('views', __dirname + '/views');
+app.set('view engine', 'jade');
 app.use(express.bodyParser())
 app.use(app.router)
 app.use(express.static(path.resolve(__dirname, './public')))
@@ -111,11 +113,8 @@ app.post('/polysocket/socket', function(req, res) {
 })
 
 app.get('/', function (req, res) {
-  // http://blog.nodeknockout.com/post/35364532732/protip-add-the-vote-ko-badge-to-your-app
-  var voteko = '<iframe src="http://nodeknockout.com/iframe/nodest-colony" frameborder=0 scrolling=no allowtransparency=true width=115 height=25></iframe>are you seeing this!?'
-
-  res.writeHead(200, {'Content-Type': 'text/html'})
-  res.end('<html><body>' + voteko + '</body></html>\n')
+  console.log('rendering')
+  res.render('index')
 })
 
 app.listen(port, function(err) {
