@@ -3,7 +3,6 @@ require('nko')('E1pvbS_tnK63AqjI')
 
 var isProduction = (process.env.NODE_ENV === 'production')
   , express      = require('express')
-  , http         = require('http')
   , port         = (isProduction ? 80 : 8000)
   , Q            = require('q')
   , uuid         = require('uuid')
