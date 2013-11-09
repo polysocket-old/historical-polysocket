@@ -78,6 +78,7 @@ var PolySocket = function(ws) {
 
       function poll() {
         microAjax('/polysocket/xhr-poll?socket_id=' + self.socket_id, function(result, status) {
+          console.log(result)
           var data = JSON.parse(result)
 
           if(status === 400) {
