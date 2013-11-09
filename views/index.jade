@@ -1,4 +1,5 @@
 extends layout
+include demo
 
 block content
   header.header
@@ -7,6 +8,7 @@ block content
         h1 PolySocket 
         span Develop realtime apps with pure WebSockets, yet still support old browsers and crummy networks
   .container.text-center
+    +demo()
     .row
       .col-lg-4
         h2 What?

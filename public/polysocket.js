@@ -23,6 +23,11 @@
       //Do things!
     }
 
+   - Listening for connection close
+    ps.onclose = function() {
+      //:(
+    }
+
     - Handle errors
     ps.onerror = function(error) {
       console.log("An error occured: " + error)
@@ -75,12 +80,25 @@ var PolySocket = function(ws) {
           method: 'GET',
           url: '/polysocket/xhr-poll?socket_id=' + self.socket_id,
           success: function(data) {
-            poll()
-            data.data.forEach(function(msg) {
-              if(self.onmessage)
-                self.onmessage(msg)
-              else
-                console.log(msg)
+            var closed = data.events.some(function(event){
+              return event.event === 'close'
+            })
+
+            if(!closed)
+              poll()
+            else {
+              if(self.onclose)
+                return self.onclose()
+              console.log("PolySocket closed")
+            }
+
+            data.events.forEach(function(event) {
+              if(event.event === 'message') {
+                if(self.onmessage)
+                  self.onmessage({data: event.data})
+                else
+                  console.log(msg)
+              }
             })
           }
         })

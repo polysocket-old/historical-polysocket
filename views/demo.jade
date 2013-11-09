@@ -1,0 +1,17 @@
+mixin demo()
+  script(src="/jquery.js")
+  script(src="/polysocket.js")
+  script(src="/demo.js")
+  .demo
+    .row
+      .col-lg-12
+        h2 Demo
+        em using websocket server for <a href="http://html5demos.com/web-socket" target="_blank">http://html5demos.com/web-socket</a>
+        .connection
+          span.status.label.label-danger Disconnected
+          p.users Users Connected:
+        textarea(rows="10", cols="80")
+        form
+          input(type="text", name="test")
+          input(type="submit", value="send")
+    </form>
