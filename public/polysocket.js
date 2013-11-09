@@ -78,7 +78,7 @@ var PolySocket = function(ws) {
             poll()
             data.data.forEach(function(msg) {
               if(self.onmessage)
-                self.onmessage(datum)
+                self.onmessage(msg)
               else
                 console.log(msg)
             })
