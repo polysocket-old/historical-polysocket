@@ -3,6 +3,7 @@ require('nko')('E1pvbS_tnK63AqjI')
 
 var isProduction = (process.env.NODE_ENV === 'production')
   , express      = require('express')
+  , path         = require('path')
   , port         = (isProduction ? 80 : 8000)
   , Q            = require('q')
   , uuid         = require('uuid')
@@ -12,7 +13,8 @@ var app = express()
 var sockets = {} // will I store my sockets here?
 
 app.use(express.bodyParser())
-app.use(express.static('public'))
+app.use(app.router)
+app.use(express.static(path.resolve(__dirname, './public')))
 
 function Socket(ws){
   var self    = this
@@ -109,10 +111,9 @@ app.post('/polysocket/socket', function(req, res) {
   res.send(201)
 })
 
-app.get('*', function (req, res) {
-  console.log(req.url)
+app.get('/', function (req, res) {
   // http://blog.nodeknockout.com/post/35364532732/protip-add-the-vote-ko-badge-to-your-app
-  var voteko = '<iframe src="http://nodeknockout.com/iframe/nodest-colony" frameborder=0 scrolling=no allowtransparency=true width=115 height=25></iframe>'
+  var voteko = '<iframe src="http://nodeknockout.com/iframe/nodest-colony" frameborder=0 scrolling=no allowtransparency=true width=115 height=25></iframe>are you seeing this!?'
 
   res.writeHead(200, {'Content-Type': 'text/html'})
   res.end('<html><body>' + voteko + '</body></html>\n')
