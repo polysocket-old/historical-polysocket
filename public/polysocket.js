@@ -77,8 +77,7 @@ var PolySocket = function(ws) {
       self.socket_id = data.socket_id
 
       function poll() {
-        microAjax('/polysocket/xhr-poll?socket_id=' + self.socket_id, function(result, status) {
-          console.log(result)
+        microAjax('/polysocket/xhr-poll?socket_id=' + self.socket_id, null, function(result, status) {
           var data = JSON.parse(result)
 
           if(status === 400) {
@@ -86,6 +85,7 @@ var PolySocket = function(ws) {
               return self.onerror(data)
             return console.error(data)
           }
+
           var isClosed = false
             , count = data.events.length
 
