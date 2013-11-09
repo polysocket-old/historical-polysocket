@@ -16,9 +16,19 @@ app.use(express.bodyParser())
 app.use(express.static('public'))
 
 function Socket(ws){
+  var self    = this
   this.buffer = []
   this.client = null
   this.ws     = ws
+  this.ws.then(function(ws) {
+    ws.on('message', function(data) {
+      console.log('websocket:data', data)
+      self.send_client(data)
+    })
+    ws.once('close', function() {
+      console.log('websocket:close')
+    })
+  })
 }
 
 // sets the current response client socket (current xhr poll stream)
@@ -53,11 +63,20 @@ Socket.prototype.send_ws = function(data) {
 // (TODO forward headers)
 app.post('/polysocket/create', function(req, res) {
   var socket_id = uuid.v1()
+    , target_ws = req.body.target_ws
     , wsp       = Q.defer()
     , ws 
 
   sockets[socket_id] = new Socket(wsp)
-
+  ws = new WebSocket(target_ws)
+  ws.once('open', function() {
+    console.log('websocket:open')
+    wsp.resolve(ws)
+  })
+  ws.once('error', function(err) {
+    console.error('websocket:error', err)
+    wsp.reject(err)
+  })
 })
 
 // long-lived polling xhr request, returns when we have data
