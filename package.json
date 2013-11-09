@@ -12,8 +12,6 @@
   },
   "dependencies": {
     "nko": "*",
-    "connect": "~2.11.0",
-    "dispatch": "~0.2.0",
     "express": "~3.4.4",
     "q": "~0.9.7",
     "uuid": "~1.4.1",
