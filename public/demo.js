@@ -12,7 +12,7 @@ $(function() {
       data = '"' + data + '"'
       addMessage('you', data)
       $input.val('')
-      ps.send(data.replace('"', '">> '))
+      ps.send(data)
       return false
     })
   }
