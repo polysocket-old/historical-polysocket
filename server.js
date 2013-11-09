@@ -12,6 +12,7 @@ var app = express()
 var sockets = {} // will I store my sockets here?
 
 app.use(express.bodyParser())
+app.use(app.router)
 app.use(express.static('public'))
 
 function Socket(ws){
@@ -108,7 +109,7 @@ app.post('/polysocket/socket', function(req, res) {
   res.send(201)
 })
 
-app.get('*', function (req, res) {
+app.get('/', function (req, res) {
   // http://blog.nodeknockout.com/post/35364532732/protip-add-the-vote-ko-badge-to-your-app
   var voteko = '<iframe src="http://nodeknockout.com/iframe/nodest-colony" frameborder=0 scrolling=no allowtransparency=true width=115 height=25></iframe>are you seeing this!?'
 
