@@ -6,7 +6,8 @@ $(function() {
 
   ps.onopen = function() {
     $('.status').addClass('label-success').removeClass('label-danger').html('Connected')
-    $('form').on('submit', function() {
+    $('form').on('submit', function(e) {
+      e.preventDefault()
       var data = $input.val()
       data = '"' + data + '"'
       addMessage('you', data)
