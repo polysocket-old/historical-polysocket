@@ -34,7 +34,7 @@ function Socket(ws){
 // sets the current response client socket (current xhr poll stream)
 // sends any buffered messages immediately
 Socket.prototype.set_client = function(client) {
-  if (buffer.length) {
+  if (this.buffer.length) {
     client.json({data: buffer})
     this.buffer = []
     this.client = null
