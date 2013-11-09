@@ -54,21 +54,7 @@ var PolySocket = function(ws) {
 
   self.send = function() { console.error("Not yet connected") }
 
-  if(!$ || !$.ajax) {
-    var script = document.body.createElement('script')
-    script.type = 'text/javascript'
-    script.src = '//cdnjs.cloudflare.com/ajax/libs/zepto/1.0/zepto.min.js'
-    document.body.appendChild(script)
-
-    var interval = setInterval(function() {
-      if($ && $.ajax) {
-        clearInterval(interval)
-        connect()
-      }
-    }, 1000)
-  } else {
-    connect()
-  }
+  connect()
 
   function connect() {
 
