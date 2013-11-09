@@ -5,11 +5,89 @@ var isProduction = (process.env.NODE_ENV === 'production')
   , express      = require('express')
   , http         = require('http')
   , port         = (isProduction ? 80 : 8000)
+  , Q            = require('q')
+  , uuid         = require('uuid')
+  , WebSocket    = require('ws')
 
 var app = express()
+var sockets = {} // will I store my sockets here?
 
 app.use(express.bodyParser())
 app.use(express.static('public'))
+
+function Socket(ws){
+  this.buffer = []
+  this.client = null
+  this.ws     = ws
+}
+
+// sets the current response client socket (current xhr poll stream)
+// sends any buffered messages immediately
+Socket.prototype.set_client = function(client) {
+  if (buffer.length) {
+    client.json({data: buffer})
+    this.buffer = []
+    this.client = null
+  } else {
+    this.client = client
+  }
+}
+
+// either uses the current client, or buffers and waits for client
+Socket.prototype.send_client = function(data) {
+  this.buffer.push(data) 
+  if (this.client) {
+    this.set_client()
+  }
+}
+
+// sends data to the connected websocket
+Socket.prototype.send_ws = function(data) {
+  this.ws.then(function(ws) {
+    ws.send(data)
+  })
+}
+
+// creates a polysocket-managed socket
+// must provide target_ws parameter
+// (TODO forward headers)
+app.post('/polysocket/create', function(req, res) {
+  var socket_id = uuid.v1()
+    , wsp       = Q.defer()
+    , ws 
+
+  sockets[socket_id] = new Socket(wsp)
+
+})
+
+// long-lived polling xhr request, returns when we have data
+// must provide valid socket_id parameter
+// eventually returns 200 {data: #{data}} on success
+// returns 400 {error: "don't call me like that, asshole"} on error
+app.get('/polysocket/xhr-poll', function(req, res) {
+  var socket_id = req.query.socket_id
+  if (!sockets[socket_id]) {
+    // bitch, that's a mistake
+    return res.json(400, {error: 'bitch, you best get yo\'self a real socket'})
+  }
+  sockets[socket_id].set_client(res)
+})
+
+// short post into an existing socket
+// must provide valid socket_id parameter
+// must provide data parameter
+// returns 201 on success
+// returns 400 {error: "what did you call me?"} on error
+app.post('/polysocket/socket', function(req, res) {
+  var socket_id = req.body.socket_id
+    , data      = req.body.data
+
+  if (!sockets[socket_id]) {
+    return res.json(400, {error: 'get a real socket, asshole'})
+  }
+  sockets[socket_id].send_ws(data)
+  res.send(201)
+})
 
 app.get('*', function (req, res) {
   // http://blog.nodeknockout.com/post/35364532732/protip-add-the-vote-ko-badge-to-your-app
