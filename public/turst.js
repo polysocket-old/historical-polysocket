@@ -1,18 +1,19 @@
 $.post('/polysocket/create', {target_ws: "ws://echo.websocket.org"}).done(function(response) {
   var socket_id = response.socket_id
   forever(socket_id)
-  setInterval(function() {
-    $.post('/polysocket/socket', {socket_id: socket_id, data: "Oh hai?"}).done(function() {
-    }).fail(function(err){
-      console.error(err)
-    })
-  }, 3000)
+  $('form').on('submit', function() {
+    var data = $('input[type="text"]').val()
+    $('input[type="text"]').val('')
+    $.post('/polysocket/socket', {socket_id: socket_id, data: data})
+    return false
+  })
 }).fail(function(err) {
   console.error(err)
 })
 
 function forever(socket_id) {
   $.get('/polysocket/xhr-poll', {socket_id: socket_id}).done(function(response) {
-    console.log('data', response.data)
+    var data = response.data
+    $('textarea').val(data.join('\n') + '\n' + $('textarea').val())
   }).complete(forever.bind(null, socket_id))
 }
