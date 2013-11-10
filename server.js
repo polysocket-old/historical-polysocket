@@ -84,6 +84,9 @@ app.post('/polysocket/socket', function(req, res) {
 })
 
 app.get('/', function (req, res) {
+  if (!/nodeknockout/.test(req.host)) {
+    res.redirect('http://nodest-colony.2013.nodeknockout.com/')
+  }
   res.render('index')
 })
 
