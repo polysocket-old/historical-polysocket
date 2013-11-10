@@ -61,21 +61,20 @@ if(!window.console) {
   window.console.error = console.log
 }
 
-function PolySocket(uri) {
+function PolySocket(uri, protocols, options) {
+
+  options = options || {}
+
   if(!(this instanceof PolySocket))
-    return new PolySocket(uri)
+    return new PolySocket(uri, protocols, options)
+
   var self        = this
   this._is_closed = true
   this._uri       = uri
-  this._connect().done(function(response) {
-    self._socket_id = response.socket_id
-    self._is_closed = false
-    self._poll()
-    self.onopen()
-  }).fail(function(err) {
-    self.onerror(err)
-    self._close()
-  })
+  this._protocols = protocols
+  this._relay     = options.relay || 'http://polysocket.io'
+  this._transports= options.transports || ['xhr-polling', 'websocket']
+  return this._connect()
 }
 
 PolySocket.prototype.onerror = function(err) {
@@ -112,12 +111,36 @@ PolySocket.prototype._close = function() {
 }
 
 PolySocket.prototype._connect = function() {
-  return $.ajax('/polysocket/create', {
-    type: 'POST',
-    data: {
-      target_ws: this._uri
-    }
-  })
+  var count = this._transports.length
+    , transportHash = {}
+    , self = this
+
+  for(var i = 0; i < count; ++i) {
+    transportHash[this._transports[i]] = true
+  }
+
+  if(transportHash['websocket'] && window.WebSocket)
+    return new WebSocket(self._uri, self._protocols)
+
+  if (transportHash['xhr-poll']) {
+    $.ajax('/polysocket/create', {
+      type: 'POST',
+      data: {
+        target_ws: this._uri
+      }
+    }).done(function(response) {
+      self._socket_id = response.socket_id
+      self._is_closed = false
+      self._poll()
+      self.onopen()
+    }).fail(function(err) {
+      if(self.onerror)
+        self.onerror(err)
+      self._close()
+    })
+    return self
+  }
+
 }
 
 PolySocket.prototype._poll = function() {
@@ -134,7 +157,7 @@ PolySocket.prototype._poll = function() {
   }).done(function(result) {
     var count = result.events.length
       , i
- 
+
     for (i = 0; i < count; ++i) {
       (function(event) {
         if (event.event === 'close') {
