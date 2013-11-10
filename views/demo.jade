@@ -6,7 +6,12 @@ mixin demo()
       .col-lg-1
       .col-lg-6
         h2 Demo
-        em using WebSocket server for <a href="http://html5demos.com/web-socket" target="_blank">http://html5demos.com/web-socket</a>
+        p.lead Let's connect to a 3rd-party WebSocket server...
+        h4 (using xhr-polling)
+        em 
+          a(href="http://html5demos.com/web-socket", target="_blank") http://html5demos.com/web-socket
+        br
+        br
         .connection
           span.status.label.label-danger Disconnected
           p.users Users Connected:
@@ -23,13 +28,13 @@ mixin demo()
           ul
             li 
               strong That's no WebSocket
-              span : we configured PolySocket to use xhr-polling instead of WebSocket (check dev tools).
+              span : we configured this demo to use xhr-polling instead of WebSockets (check dev tools).
             br
             li 
-              strong No changes to the server. 
+              strong No changes to the WebSocket server. 
               span In fact... we don't even control the demo server. We're connecting to a 
               em pure 
-              span websocket server used in html5 demos (thanks Remy).
+              span WebSocket server used in html5 demos (thanks Remy).
             br
             li 
               strong A true WebSocket polyfill 

@@ -7,7 +7,7 @@ block content
       .jumbotron
         iframe.pull-right(src="http://nodeknockout.com/iframe/nodest-colony", frameborder=0, scrolling=no, allowtransparency=true, width=115, height=25)
         h1 PolySocket 
-        p.lead Develop realtime apps with pure WebSockets, yet still support old browsers and crummy networks
+        p.lead Develop realtime apps using only WebSockets, yet still support old browsers and crummy networks
   .container.text-center
     .panel.panel-info
       .panel-heading
@@ -31,13 +31,15 @@ block content
       .panel-body
         .row
           .col-lg-6
-            h3 Echo server
+            h3 chat server
             script(src="https://gist.github.com/supershabam/7382515.js")
           .col-lg-6
-            h3 Echo client
+            h3 chat client
             script(src='https://gist.github.com/supershabam/7382596.js')
       .panel-footer.text-center
-        h2 Did you notice the use of WebSockets!?
+        h2 Woah! Only WebSockets in the server!?
+        p.lead Yes, that's right. No hard to scale/maintain/understand hacks in your application code!
+        p.lead Oh, and use whatever backend language you want.
     .row
       .col-lg-12
         .page-header
