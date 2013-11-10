@@ -85,6 +85,10 @@ PolySocket.prototype.onmessage = function(message) {
   console.log(message)
 }
 
+PolySocket.prototype.onclose = function() {
+  console.log('close')
+}
+
 PolySocket.prototype.onopen = function() {
   console.log('open')
 }
@@ -108,6 +112,7 @@ PolySocket.prototype.send = function(msg) {
 PolySocket.prototype._close = function() {
   this._is_closed = true
   this._socket_id = null
+  this.onclose()
 }
 
 PolySocket.prototype._connect = function() {
@@ -164,6 +169,8 @@ PolySocket.prototype._poll = function() {
           self._close()
         } else if (event.event === 'message') {
           self.onmessage({data: event.data})
+        } else {
+          console.log('unhandled event', event)
         }
       })(result.events[i])
     }
