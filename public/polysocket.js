@@ -72,7 +72,8 @@ function PolySocket(uri, protocols, options) {
   this._is_closed = true
   this._uri       = uri
   this._protocols = protocols
-  this._relay     = options.relay || 'http://polysocket.io'
+  options         = options            || {}
+  this._relay     = options.relay      || 'http://polysocket.io'
   this._transports= options.transports || ['xhr-polling', 'websocket']
   return this._connect()
 }
@@ -98,7 +99,7 @@ PolySocket.prototype.send = function(msg) {
     throw new Error("Not connected")
   }
   var self = this
-  $.ajax(self._relay + '/polysocket/socket', {
+  $.ajax('/polysocket/socket', {
     type: 'POST',
     data: {
       data      : msg,
@@ -128,7 +129,7 @@ PolySocket.prototype._connect = function() {
     return new WebSocket(self._uri, self._protocols)
 
   if (transportHash['xhr-poll']) {
-    $.ajax(self._relay + '/polysocket/create', {
+    $.ajax('/polysocket/create', {
       type: 'POST',
       data: {
         target_ws: this._uri
@@ -154,7 +155,7 @@ PolySocket.prototype._poll = function() {
   }
 
   var self = this
-  $.ajax(self._relay + '/polysocket/xhr-poll', {
+  $.ajax('/polysocket/xhr-poll', {
     data: {
       socket_id : this._socket_id,
       _         : Math.random()
