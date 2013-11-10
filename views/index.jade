@@ -5,10 +5,15 @@ block content
   header.header
     .container
       .jumbotron
+        iframe.pull-right(src="http://nodeknockout.com/iframe/nodest-colony", frameborder=0, scrolling=no, allowtransparency=true, width=115, height=25)
         h1 PolySocket 
-        span Develop realtime apps with pure WebSockets, yet still support old browsers and crummy networks
+        p.lead Develop realtime apps with pure WebSockets, yet still support old browsers and crummy networks
   .container.text-center
-    +demo()
+    .panel.panel-info
+      .panel-heading
+        h1 Demo
+      .panel-body
+        +demo()
     .row
       .col-lg-4
         h2 What?
@@ -20,30 +25,21 @@ block content
         h2 How?
         p.lead When WebSockets are unavailable, the browser connects to a PolySocket Relay. The relay then pipes all data to your pure WebSocket server.
   .container
-    .row
-      .col-lg-6
-        h1 Echo Server
-        p Look mah, I made a echo server. IE 6 can still play along too.
-      .col-lg-6
-        script(src="https://gist.github.com/supershabam/7382515.js")
-    .row
-      .col-lg-6
-        h1 Echo Client
-        p Look mah, I connected to an echo server. IE 6 can still play along too.
-      .col-lg-6
-        script(src='https://gist.github.com/taterbase/7392803.js')
-    .row
-      .col-lg-12
-        h1 How will it scale?
-        p Scaling up shims, xhr-polling, event-sources, and whatever nonsense is used to emulate a websocket can be difficult, 
-          strong which is why it should be separate from your app!
-        p Using PolySocket, we designed the shims and nasty hacks we implemented to scale up to multiple servers to handle scaling load. Scaling up your application means scaling up websocket servers.
-
+    .panel.panel-info
+      .panel-heading.text-center
+        h1 Let's use PolySocket!
+      .panel-body
+        .row
+          .col-lg-6
+            h3 Echo server
+            script(src="https://gist.github.com/supershabam/7382515.js")
+          .col-lg-6
+            h3 Echo client
+            script(src='https://gist.github.com/supershabam/7382596.js')
+      .panel-footer.text-center
+        h2 Did you notice the use of WebSockets!?
     .row
       .col-lg-12
         .page-header
           h1 Try it in your own app
           pre= '<script src="http://polysocket.io/polysocket.js" type="text/javascript"></script>'
-
-
-
