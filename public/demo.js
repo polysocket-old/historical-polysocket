@@ -1,5 +1,5 @@
 $(function() {
-  var ps = PolySocket('ws://node.remysharp.com:8001')
+  var ps = PolySocket('ws://node.remysharp.com:8001', null, {transports: ['xhr-poll']})
     , $txt = $('textarea')
     , $connected = $('.connection p.users')
     , $input = $('input[type="text"]')

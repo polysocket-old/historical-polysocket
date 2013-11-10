@@ -19,6 +19,13 @@ app.use(express.bodyParser())
 app.use(app.router)
 app.use(express.static(path.resolve(__dirname, './public')))
 
+// Enable CORS
+app.all('*', function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "X-Requested-With");
+  next();
+});
+
 // creates a polysocket-managed socket
 // must provide target_ws parameter
 // (TODO forward headers)
