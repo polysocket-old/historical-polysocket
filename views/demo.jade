@@ -21,9 +21,17 @@ mixin demo()
         .well
           h3 So What?
           ul
-            li This demo is using basic xhr-polling to connect to the PolySocket server which in turn connects to the actual chat server's WebSocket.
+            li 
+              strong That's no WebSocket
+              span : we configured PolySocket to use xhr-polling instead of WebSocket (check dev tools).
             br
-            li No more runtime specific server libraries to manage and shim fake WebSockets.
+            li 
+              strong No changes to the server. 
+              span In fact... we don't even control the demo server. We're connecting to a 
+              em pure 
+              span websocket server used in html5 demos (thanks Remy).
             br
-            li Just use PolySocket and build your server expecting real WebSocket connections.
+            li 
+              strong A true WebSocket polyfill 
+              span by substituting "PolySocket" in for "WebSocket" in your client code, you can rely on using WebSockets in any browser. 
       .col-lg-1

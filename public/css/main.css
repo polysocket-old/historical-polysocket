@@ -1,3 +1,11 @@
+body {
+  background: #fff url('/vendor/struckaxiom.png');
+}
+
+.container {
+  background: #fff;
+}
+
 .oversized {
   font-size: 300%;
 }
