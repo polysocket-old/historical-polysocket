@@ -6,7 +6,12 @@ mixin demo()
       .col-lg-1
       .col-lg-6
         h2 Demo
-        em using WebSocket server for <a href="http://html5demos.com/web-socket" target="_blank">http://html5demos.com/web-socket</a>
+        p.lead Let's connect to a 3rd-party WebSocket server...
+        h4 (using xhr-polling)
+        em 
+          a(href="http://html5demos.com/web-socket", target="_blank") http://html5demos.com/web-socket
+        br
+        br
         .connection
           span.status.label.label-danger Disconnected
           p.users Users Connected:
