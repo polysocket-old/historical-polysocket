@@ -98,7 +98,7 @@ PolySocket.prototype.send = function(msg) {
     throw new Error("Not connected")
   }
   var self = this
-  $.ajax('/polysocket/socket', {
+  $.ajax(self._relay + '/polysocket/socket', {
     type: 'POST',
     data: {
       data      : msg,
@@ -128,7 +128,7 @@ PolySocket.prototype._connect = function() {
     return new WebSocket(self._uri, self._protocols)
 
   if (transportHash['xhr-poll']) {
-    $.ajax('/polysocket/create', {
+    $.ajax(self._relay + '/polysocket/create', {
       type: 'POST',
       data: {
         target_ws: this._uri
@@ -154,7 +154,7 @@ PolySocket.prototype._poll = function() {
   }
 
   var self = this
-  $.ajax('/polysocket/xhr-poll', {
+  $.ajax(self._relay + '/polysocket/xhr-poll', {
     data: {
       socket_id : this._socket_id,
       _         : Math.random()
