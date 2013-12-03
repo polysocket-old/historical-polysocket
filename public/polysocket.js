@@ -18,7 +18,7 @@ u[o]&&(delete u[o],c?delete n[l]:typeof n.removeAttribute!==i?n.removeAttribute(
     var PolySocket = polysocket.create({
       router: "polysocket.com",
       timeout: 30,
-      transports: ['websocket', 'xhr-polling']
+      transports: ['websocket', 'xhr-poll']
     })
 
   + Create a PolySocket
@@ -74,9 +74,13 @@ function PolySocket(uri, protocols, options) {
   this._protocols = protocols
   options         = options            || {}
   this._relay     = options.relay      || 'http://polysocket.io'
-  this._transports= options.transports || ['xhr-polling', 'websocket']
+  this._transports= options.transports || ['xhr-poll', 'websocket']
   return this._connect()
 }
+
+// Replace global WebSocket
+window._WebSocket = window.WebSocket
+window.WebSocket  = PolySocket
 
 PolySocket.prototype.onerror = function(err) {
   console.error(err)
@@ -125,8 +129,8 @@ PolySocket.prototype._connect = function() {
     transportHash[this._transports[i]] = true
   }
 
-  if(transportHash['websocket'] && window.WebSocket)
-    return new WebSocket(self._uri, self._protocols)
+  if(transportHash['websocket'] && window._WebSocket)
+    return new window._WebSocket(self._uri, self._protocols)
 
   if (transportHash['xhr-poll']) {
     $.ajax('/polysocket/create', {

@@ -1,5 +1,5 @@
 $(function() {
-  var ps = PolySocket('ws://echo.websocket.org')
+  var ps = WebSocket('ws://echo.websocket.org')
     , $txt = $('textarea')
 
   ps.onopen = function() {
@@ -11,7 +11,7 @@ $(function() {
   }
 
   ps.onmessage = function(msg) {
-    $txt.val(msg + '\n' + $txt.val())
+    $txt.val(msg.data + '\n' + $txt.val())
   }
 
 })
