@@ -1,6 +1,3 @@
-// https://github.com/nko4/website/blob/master/module/README.md#nodejs-knockout-deploy-check-ins
-require('nko')('E1pvbS_tnK63AqjI')
-
 var isProduction     = (process.env.NODE_ENV === 'production')
   , express          = require('express')
   , path             = require('path')
@@ -84,9 +81,6 @@ app.post('/polysocket/socket', function(req, res) {
 })
 
 app.get('/', function (req, res) {
-  if (!/nodeknockout/.test(req.host)) {
-    res.redirect('http://nodest-colony.2013.nodeknockout.com/')
-  }
   res.render('index')
 })
 
