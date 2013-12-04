@@ -29,4 +29,4 @@ WebSockets are standard. If the day ever comes that 100% of your customers suppo
 
 ## License
 
-Apache 2
+MIT
